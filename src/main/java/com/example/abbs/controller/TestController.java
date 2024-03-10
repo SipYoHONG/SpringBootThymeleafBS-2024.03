@@ -10,5 +10,6 @@ public class TestController {
 	public String index() {
 		return "index";
 	}
+
 	
 }

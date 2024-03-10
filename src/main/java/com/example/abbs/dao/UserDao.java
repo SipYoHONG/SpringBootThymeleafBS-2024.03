@@ -11,6 +11,7 @@ import com.example.abbs.entity.User;
 
 @Mapper
 public interface UserDao {
+
 	@Select("select * from users where uid=#{uid}")
 	User getUser(String uid);
 	
@@ -22,13 +23,14 @@ public interface UserDao {
 			+ " #{profile}, #{github}, #{insta}, #{location})")
 	void insertUser(User user);
 	
-	@Update("update users set pwd=#{pwd}, uname=#{uname}, email=#{email}, profile=#{profile}, "
+	@Update("update users set pwd=#{pwd}, uname=#{uname}, email=#{email}, profile=#{profile},"
 			+ " github=#{github}, insta=#{insta}, location=#{location} where uid=#{uid}")
 	void updateUser(User user);
-
+	
 	@Update("update users set isDeleted=1 where uid=#{uid}")
 	void deleteUser(String uid);
 	
 	@Select("select count(uid) from users where isDeleted=0")
 	int getUserCount();
+	
 }

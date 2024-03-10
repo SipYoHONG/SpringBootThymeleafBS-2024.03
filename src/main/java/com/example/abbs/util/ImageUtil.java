@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 @Service
 public class ImageUtil {
 	@Value("${spring.servlet.multipart.location}") private String uploadDir;
@@ -58,4 +59,5 @@ public class ImageUtil {
 		}
 		return newFname;
 	}
+	
 }

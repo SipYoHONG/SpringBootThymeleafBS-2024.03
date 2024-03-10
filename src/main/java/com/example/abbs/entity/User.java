@@ -26,7 +26,6 @@ public class User {
 		this.insta = insta;
 		this.location = location;
 	}
-
 	public User(String uid, String pwd, String uname, String email, LocalDate regDate, int isDeleted, String profile,
 			String github, String insta, String location) {
 		this.uid = uid;
