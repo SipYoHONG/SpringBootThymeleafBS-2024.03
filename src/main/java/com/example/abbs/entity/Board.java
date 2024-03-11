@@ -13,8 +13,23 @@ public class Board {
 	private int replyCount;
 	private int likeCount;
 	private String files;
+	private String uname;
 	
 	public Board() { }
+	public Board(int bid, String title, String content, String uid, LocalDateTime modTime, int isDeleted, int viewCount,
+			int replyCount, int likeCount, String files, String uname) {
+		this.bid = bid;
+		this.title = title;
+		this.content = content;
+		this.uid = uid;
+		this.modTime = modTime;
+		this.isDeleted = isDeleted;
+		this.viewCount = viewCount;
+		this.replyCount = replyCount;
+		this.likeCount = likeCount;
+		this.files = files;
+		this.uname = uname;
+	}
 	public Board(int bid, String title, String content, String uid, LocalDateTime modTime, int isDeleted, int viewCount,
 			int replyCount, int likeCount, String files) {
 		this.bid = bid;
@@ -29,11 +44,12 @@ public class Board {
 		this.files = files;
 	};
 	
+
 	@Override
 	public String toString() {
 		return "Board [bid=" + bid + ", title=" + title + ", content=" + content + ", uid=" + uid + ", modTime="
 				+ modTime + ", isDeleted=" + isDeleted + ", viewCount=" + viewCount + ", replyCount=" + replyCount
-				+ ", likeCount=" + likeCount + ", files=" + files + "]";
+				+ ", likeCount=" + likeCount + ", files=" + files + ", uname=" + uname + "]";
 	}
 	
 	public int getBid() {
@@ -96,4 +112,11 @@ public class Board {
 	public void setFiles(String files) {
 		this.files = files;
 	}
+	public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	
 }
