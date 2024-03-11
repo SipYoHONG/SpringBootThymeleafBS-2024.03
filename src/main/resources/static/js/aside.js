@@ -7,6 +7,7 @@ $(document).ready(function() {      // 이벤트 등록
     $('#stateInput').val($('#stateMsg').text());    // 입력창에 stateMsg 내용이 보이게
   });
   $('#stateMsgSubmit').click(changeStateMsg);     // 이벤트 등록
+  $('#getWeatherButton').click(getWeather);
 });
 
 function changeStateMsg() {
@@ -21,4 +22,14 @@ function changeStateMsg() {
       $('#stateMsg').html(stateInputVal);
     }
   });
+}
+
+function getWeather() {
+	$.ajax({
+		type: 'GET',
+		url: '/abbs/aside/weather',
+		success: function(result) {
+			$('#weather').html(result);
+		}	
+	});
 }
