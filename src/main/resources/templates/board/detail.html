@@ -5,7 +5,7 @@
 	<style>
 		td, th { text-align: center; }
 	</style>
-	<script>
+	<script th:inline="javascript">
 		function deleteBoard() {
 			$('#deleteModal').modal('show');
 		}
@@ -42,9 +42,9 @@
 							<h6>글번호: [[${board.bid}]] | 
 								<span th:text="${#temporals.format(board.modTime, 'yy-MM-dd HH:mm')}"></span>
 							</h6>
-							<h6>첨부 파일: 
+							<h6>첨부 파일:
 								<span th:each="file: ${fileList}">
-									<a th:herf="@{/file/download/upload/{x}(x=${file})}" class="me-2" download>[[${file}]]</a>
+									<a th:href="@{/file/download/upload/{x}(x=${file})}" class="me-2" download>[[${file}]]</a>
 								</span>
 							</h6>
 						</div>
@@ -55,12 +55,57 @@
 						</div>
 						<hr>
 						<div class="col-12" th:utext="${board.content}"></div>
+						<br><br><hr>
 					</div>
+					
+					<div th:each="reply: ${replyList}">
+						<div class="row" th:if="${reply.isMine == 0}">
+							<div class="col-9">
+								<span class="me-2">[[${reply.uname}]]</span>
+								<span th:text="${#temporals.format(reply.regTime, 'yy-MM-dd HH:mm')}"></span><br>
+								<span>[(${reply.comment})] </span>
+							</div>
+							<div class="col-3"></div>
+						</div>
+						<div class="row" th:if="${reply.isMine == 1}">
+							<div class="col-3"></div>
+							<div class="col-9 text-end">
+								<span class="me-2">[[${reply.uname}]]</span>
+								<span th:text="${#temporals.format(reply.regTime, 'yy-MM-dd HH:mm')}"></span><br>
+								<span>[(${reply.comment})] </span>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<form class="form-inline" action="/reply/insert" method="post">
+						
+					</form>
 				</main>
 			</div>
 		</div>
 	</div>
 
 	<footer th:replace="~{fragments/base :: bottom}"></footer>
+	
+<div class="modal" id="deleteModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<h4 class="modal-title">게시글 삭제</h4>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+		
+			<!-- Modal body -->
+			<div class="modal-body">
+				<strong>정말로 삭제하시겠습니까?</strong>
+				<div class="text-center mt-5">
+					<button type="button" class="btn btn-danger" th:onclick="|location.href='@{/board/delete/{x}(x=${board.bid})}'|">삭제</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	
 </body>
 </html>
