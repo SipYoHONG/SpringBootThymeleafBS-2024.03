@@ -32,8 +32,7 @@ public class LikeServiceImpl implements LikeService {
 		like = likeDao.getLike(like.getBid(), like.getUid());
 		int value = like.getValue() == 0 ? 1 : 0;
 		like.setValue(value);
-		likeDao.updateLike(like);
-		
+		likeDao.updateLike(like);	
 	}
 
 	@Override

@@ -68,5 +68,6 @@ public class BoardServiceImpl implements BoardService {
 		boardDao.increaseCount(field, bid);
 		
 	}
+
 	
 }
