@@ -25,11 +25,11 @@
 					<h3><strong>게시글 상세 조회</strong>
 						<span style="font-size:16px">
 							<a th:href="@{/board/list(p=${currentBoardPage},f=${field}, q=${query})}"><i class="fa-solid fa-table-list ms-5"></i> 목록</a>
-							<span th:if="${session.sessUid eq board.uid}">	<!-- 본인만 수정/삭제 가능 -->
+							<span th:if="${session.sessUid eq board.uid || session.sessUid eq 'admin'}">	<!-- 본인만 수정/삭제 가능 -->
 								<a th:href="@{/board/update/{x}(x=${board.bid})}"><i class="fa-solid fa-file-pen ms-3"></i> 수정</a>
 								<a href="javascript:void" onclick="deleteBoard()"><i class="fa-solid fa-trash ms-3"></i> 삭제</a>
 							</span>
-							<span th:if="${session.sessUid ne board.uid}">	
+							<span th:if="${session.sessUid ne board.uid && session.sessUid ne 'admin'}">	
 								<a href="#" class="disabled-link"><i class="fa-solid fa-file-pen ms-3"></i> 수정</a>
 								<a href="#" class="disabled-link"><i class="fa-solid fa-trash ms-3"></i> 삭제</a>
 							</span>
@@ -77,8 +77,20 @@
 						</div>
 						<hr>
 					</div>
-					<form class="form-inline" action="/reply/insert" method="post">
-						
+					<form class="form-inline" action="/abbs/board/reply" method="post">
+						<input type="hidden" name="bid" th:value="${board.bid}">
+						<input type="hidden" name="uid" th:value="${board.uid}">
+						<div class="row d-flex mt-2" style="align-items: center;">
+							<div class="col-1">
+								<label class="col-form-label">댓글</label>
+							</div>
+							<div class="col-9">
+								  <textarea name="comment" rows="2" class="form-control"></textarea>
+							</div>
+							<div class="col-2">
+								<button type="submit" class="btn btn-primary ms-3">등록</button>
+							</div>
+						</div>
 					</form>
 				</main>
 			</div>
