@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.abbs.entity.Board;
+import com.example.abbs.entity.Reply;
 import com.example.abbs.service.BoardService;
 import com.example.abbs.util.JsonUtil;
 
@@ -30,18 +32,18 @@ public class BoardController {
 
 	@GetMapping("/list")
 	public String list(@RequestParam(name="p", defaultValue="1") int page,
-			@RequestParam(name="f", defaultValue="title") String field,
-			@RequestParam(name="q", defaultValue="") String query,
-			HttpSession session, Model model) {
+				@RequestParam(name="f", defaultValue="title") String field,
+				@RequestParam(name="q", defaultValue="") String query,
+				HttpSession session, Model model) {
 		List<Board> boardList = boardService.getBoardList(page, field, query);
 		
 		int totalBoardCount = boardService.getBoardCount(field, query);
 		int totalPages = (int) Math.ceil(totalBoardCount / (double)BoardService.COUNT_PER_PAGE);
-		int startPage = (int) Math.ceil((page - 0.5) / BoardService.PAGE_PER_SCREEN) * BoardService.PAGE_PER_SCREEN + 1;
+		int startPage = (int) Math.ceil((page-0.5)/BoardService.PAGE_PER_SCREEN - 1) * BoardService.PAGE_PER_SCREEN + 1;
 		int endPage = Math.min(totalPages, startPage + BoardService.PAGE_PER_SCREEN - 1);
-		List<String> pageList = new ArrayList<>();
-		for(int i = startPage; i <= endPage; i++)
-			pageList.add(String.valueOf(i));
+		List<Integer> pageList = new ArrayList<>();
+		for (int i = startPage; i <= endPage; i++)
+			pageList.add(i);
 		
 		session.setAttribute("currentBoardPage", page);
 		model.addAttribute("boardList", boardList);
@@ -51,6 +53,7 @@ public class BoardController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("pageList", pageList);
+		
 		return "board/list";
 	}
 	
@@ -84,5 +87,26 @@ public class BoardController {
 		Board board = new Board(title, content, sessUid, files);
 		boardService.insertBoard(board);
 		return "redirect:/board/list";
+	}
+	
+	@GetMapping("/detail/{bid}/{uid}")
+	public String detail(@PathVariable int bid, @PathVariable String uid, String option, 
+			HttpSession session, Model model) {
+		//본인이 조회한 경우 조회수 증가시키지 않음
+		String sessUid = (String) session.getAttribute("sessUid");
+		if (!uid.equals(sessUid))
+			boardService.increaseViewCount(bid);
+		
+		Board board = boardService.getBoard(bid);
+		String jsonFiles = board.getFiles();
+		if(!(jsonFiles == null || jsonFiles.equals(""))) {
+			List<String> fileList = jsonUtil.json2List(jsonFiles);
+			model.addAttribute("fileList", fileList);
+		}
+		model.addAttribute("board", board);
+		
+		List<Reply> replyList = null;
+		model.addAttribute("replyList", replyList);
+		return "board/detail";
 	}
 }

@@ -52,14 +52,15 @@
 							</td>
 						</tr>
 					</table>
-				<hr>
-				<table class="table">
+			<hr>
+					<table class="table">
 						<tr>
 							<th style="width: 8%">ID</th>
-							<th style="width: 52%">제목</th>
+							<th style="width: 42%">제목</th>
 							<th style="width: 14%">글쓴이</th>
 							<th style="width: 16%">수정시간</th>
 							<th style="width: 10%">조회수</th>
+							<th style="width: 10%">좋아요</th>
 						</tr>
 						<tr th:each="board: ${boardList}">
 							<td>[[${board.bid}]]</td>
@@ -72,8 +73,10 @@
 							<td>[[${board.uname}]]</td>
 							<td>[[${#temporals.format(board.modTime, 'yy-MM-dd HH:mm')}]]</td>
 							<td>[[${board.viewCount}]]</td>
+							<td>[[${board.likeCount}]]</td>
 						</tr>
 					</table>
+					
 					<!-- pagination -->
 					<ul class="pagination justify-content-center mt-4">
 						<span th:if="${session.currentBoardPage gt 10}">
@@ -83,7 +86,14 @@
 							<li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-less-than"></i></a></li>
 						</span>
 						<span th:each="page: ${pageList}">
-							<!--<li class="page-item" th:classappend="${session.currentBoardPage eq page ? 'active' : ''}">-->
+							<!-- <li class="page-item" th:classappend="${session.currentBoardPage eq page ? 'active' : ''}">
+								<span th:if="${session.currentBoardPage eq page}">
+									<a class="page-link" href="#">[[${page}]]</a>
+								</span>
+								<span th:if="${session.currentBoardPage ne page}">
+									<a class="page-link" th:href="@{/board/list(p=${page},f=${field},q=${query})}">[[${page}]]</a>
+								</span>
+							</li> -->
 							<span th:switch="${page}">
 								<th:block th:case="${session.currentBoardPage}">
 									<li class="page-item active">
@@ -108,7 +118,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<footer th:replace="~{fragments/base :: bottom}"></footer>
 </body>
 </html>

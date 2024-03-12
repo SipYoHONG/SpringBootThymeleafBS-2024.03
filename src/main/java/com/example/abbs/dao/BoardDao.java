@@ -38,6 +38,6 @@ public interface BoardDao {
 	@Update("update board set isDeleted=1 where bid=#{bid}")
 	void deleteBoard(int bid);
 	
-	@Update("update board set ${field}=${field}+1 wher bid=#{bid}")
+	@Update("update board set ${field}=${field}+1 where bid=#{bid}")
 	void increaseCount(String field, int bid);
 }
