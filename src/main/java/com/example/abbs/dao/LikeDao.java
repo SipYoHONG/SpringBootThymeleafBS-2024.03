@@ -28,4 +28,5 @@ public interface LikeDao {
 	@Update("update likes set value=#{value} where lid=#{lid}")
 	void updateLike(Like like);
 	
+	
 }
