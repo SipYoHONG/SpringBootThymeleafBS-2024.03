@@ -2,28 +2,16 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
-DROP TABLE IF EXISTS anniversary;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS reply;
 DROP TABLE IF EXISTS board;
-DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS nReply;
 DROP TABLE IF EXISTS users;
 
 
 
 
 /* Create Tables */
-
-CREATE TABLE anniversary
-(
-	aid int NOT NULL AUTO_INCREMENT,
-	uid varchar(12) NOT NULL,
-	aname varchar(20) NOT NULL,
-	adate char(8) NOT NULL,
-	isHoliday int DEFAULT 0,
-	PRIMARY KEY (aid)
-);
-
 
 CREATE TABLE board
 (
@@ -33,10 +21,12 @@ CREATE TABLE board
 	uid varchar(12) NOT NULL,
 	modTime datetime DEFAULT CURRENT_TIMESTAMP,
 	isDeleted int DEFAULT 0,
-	viewCount int DEFAULT 0,
-	replyCount int DEFAULT 0,
-	likeCount int DEFAULT 0,
-	files varchar(512),
+	category varchar(30) NOT NULL,
+	foodName varchar(30) NOT NULL,
+	openClosed varchar(30) NOT NULL,
+	address varchar(250) NOT NULL,
+	phoneNumber varchar(15) NOT NULL,
+	titleImage varchar(40) NOT NULL,
 	PRIMARY KEY (bid)
 );
 
@@ -59,22 +49,21 @@ CREATE TABLE reply
 	uid varchar(12) NOT NULL,
 	bid int NOT NULL,
 	isMine int DEFAULT 0,
+	isDeleted int DEFAULT 0,
 	PRIMARY KEY (rid)
 );
 
 
-CREATE TABLE schedule
+CREATE TABLE nReply
 (
-	sid int NOT NULL AUTO_INCREMENT,
+	ri2d int NOT NULL AUTO_INCREMENT,
+	comment varchar(256) NOT NULL,
+	regTime datetime DEFAULT CURRENT_TIMESTAMP,
 	uid varchar(12) NOT NULL,
-	sdate char(8) NOT NULL,
-	title varchar(40) NOT NULL,
-	place varchar(40),
-	startTime char(4),
-	endTime char(4),
-	isImportant int DEFAULT 0,
-	memo varchar(100),
-	PRIMARY KEY (sid)
+	bid int NOT NULL,
+	isMine int DEFAULT 0,
+	isDeleted int DEFAULT 0,
+	PRIMARY KEY (ri2d)
 );
 
 
@@ -86,10 +75,6 @@ CREATE TABLE users
 	email varchar(32),
 	regDate date DEFAULT (CURRENT_DATE),
 	isDeleted int DEFAULT 0,
-	profile varchar(40),
-	github varchar(40),
-	insta varchar(40),
-	location varchar(20),
 	PRIMARY KEY (uid)
 );
 
@@ -111,15 +96,6 @@ ALTER TABLE reply
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
-
-
-ALTER TABLE anniversary
-	ADD FOREIGN KEY (uid)
-	REFERENCES users (uid)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
 
 ALTER TABLE board
 	ADD FOREIGN KEY (uid)
@@ -144,13 +120,11 @@ ALTER TABLE reply
 	ON DELETE RESTRICT
 ;
 
-
-ALTER TABLE schedule
+ALTER TABLE nReply
 	ADD FOREIGN KEY (uid)
 	REFERENCES users (uid)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
-
 
 
