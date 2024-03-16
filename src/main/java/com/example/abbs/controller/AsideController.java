@@ -33,5 +33,4 @@ public class AsideController {
 		String result = asideUtil.getWeather(map.get("lon"), map.get("lat"));
 		return result;
 	}
-	
 }

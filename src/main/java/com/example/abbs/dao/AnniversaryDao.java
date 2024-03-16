@@ -11,8 +11,9 @@ import com.example.abbs.entity.Anniversary;
 @Mapper
 public interface AnniversaryDao {
 
-		@Select("select * from anniversary where (uid=#{uid} of uid='admin') and"
-				+ " between adate #{startDay} and #{endDay} order by adate")
+		@Select("select * from anniversary where (uid=#{uid} or uid='admin')"
+				+ " and adate between #{startDay} and #{endDay}"
+				+ " order by adate")
 		List<Anniversary> getAnnivList(String uid, String startDay, String endDay);
 		
 		@Insert("insert into anniversary values(default, #{uid}, #{aname}, #{adate}, #{isHoliday})")

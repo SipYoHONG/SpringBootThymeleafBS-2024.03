@@ -9,18 +9,18 @@ public class SchDay {
 	private int isOtherMonth;				// 지난달,다음달 숫자 나오는거 투명도 50% 설정!
 	private String sdate;					// 20240313
 	private List<String> annivList;			// 겹치는 기념일 대비용
-	private List<Schedule> schedule;
+	private List<Schedule> schedList;
 	
 	public SchDay() { }
 	public SchDay(int day, int date, int isHoliday, int isOtherMonth, String sdate, List<String> annivList,
-			List<Schedule> schedule) {
+			List<Schedule> schedList) {
 		this.day = day;
 		this.date = date;
 		this.isHoliday = isHoliday;
 		this.isOtherMonth = isOtherMonth;
 		this.sdate = sdate;
 		this.annivList = annivList;
-		this.schedule = schedule;
+		this.schedList = schedList;
 	}
 
 	public int getDay() {
@@ -59,10 +59,10 @@ public class SchDay {
 	public void setAnnivList(List<String> annivList) {
 		this.annivList = annivList;
 	}
-	public List<Schedule> getSchedule() {
-		return schedule;
+	public List<Schedule> getSchedList() {
+		return schedList;
 	}
-	public void setSchedule(List<Schedule> schedule) {
-		this.schedule = schedule;
+	public void setSchedList(List<Schedule> schedList) {
+		this.schedList = schedList;
 	}
 }
