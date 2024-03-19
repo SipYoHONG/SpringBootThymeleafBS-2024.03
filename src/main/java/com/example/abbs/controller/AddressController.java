@@ -19,8 +19,8 @@ public class AddressController {
 
     @GetMapping
     public String listAddresses(Model model) {
-        model.addAttribute("addresses", addressService.findAll());
-        return "address/list";
+        model.addAttribute("addresses", addressService.findAll()); // 모든 주소 정보를 조회하여 모델에 추가
+        return "address/list"; // 뷰 이름 반환
     }
 
     @GetMapping("/add")
@@ -36,13 +36,12 @@ public class AddressController {
         return "redirect:/address";
     }
 
-    // 주소 상세 정보 조회 및 지도에 표시
     @GetMapping("/map/{bid}")
     public String showAddressMap(@PathVariable("bid") Long bid, Model model) {
         Address address = addressService.findById(bid);
         if (address != null) {
             model.addAttribute("roadAddress", address.getAddress());
-            return "map";
+            return "address/map"; // 지도를 표시하는 뷰로 변경
         } else {
             return "redirect:/address";
         }

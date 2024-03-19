@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="utf-8">
     <title>주소로 장소 표시하기</title>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=405c285f704f2770e6ceff445cb6e60f"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=405c285f704f2770e6ceff445cb6e60f&libraries=services"></script>
 </head>
 <body>
 <div id="map" style="width:100%;height:350px;"></div>
 <script>
-    var roadAddress = [[${roadAddress}]]; // 서버에서 전달된 주소 정보
+    // 이 부분에 서버로부터 받은 주소 데이터를 배열로 저장합니다.
+    // 예: var addresses = [{"address":"서울특별시 중구 세종대로 110"}, {"address":"서울특별시 용산구 한강대로 23길 55"}];
+    var addresses = /*[[${addresses}]]*/ []; 
 
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
     var geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(roadAddress, function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            var map = new kakao.maps.Map(document.getElementById('map'), {
-                center: coords,
-                level: 3
-            });
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-        }
+
+    addresses.forEach(function(addr) {
+        // addr 객체에서 address 속성으로 주소를 가져옵니다.
+        geocoder.addressSearch(addr.address, function(result, status) { 
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">' + addr.address + '</div>'
+                });
+
+                infowindow.open(map, marker);
+
+                // 중심 좌표를 재조정합니다.
+                map.setCenter(coords);
+            } 
+        });
     });
 </script>
 </body>
