@@ -4,22 +4,28 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Update;
 import com.example.abbs.entity.Address;
 
 @Mapper
 public interface AddressDao {
-    @Select("SELECT * FROM board")
-    List<Address> findAll();
+    // 주소 목록 조회
+    @Select("SELECT address FROM board ORDER BY bid ASC")
+    List<String> findAddresses();
     
-    @Insert("INSERT INTO board (title, address) VALUES (#{title}, #{address})")
-    void insert(Address address);
+    // 주소 추가
+    @Insert("INSERT INTO board (address) VALUES (#{address})")
+    void insertAddress(String address);
     
-    @Update("UPDATE board SET title=#{title}, address=#{address} WHERE bid=#{bid}")
-    void update(Address address);
-
-    @Select("SELECT * FROM board WHERE bid = #{bid}")
-    Optional<Address> findById(Long bid);
+    // 주소 수정
+    @Update("UPDATE board SET address = #{address} WHERE bid = #{bid}")
+    void updateAddress(@Param("bid") Long bid, @Param("address") String address);
+    
+    // 주소 삭제
+    @Delete("DELETE FROM board WHERE bid = #{bid}")
+    void deleteAddress(Long bid);
 }

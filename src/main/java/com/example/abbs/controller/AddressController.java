@@ -1,49 +1,58 @@
 package com.example.abbs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.abbs.entity.Address;
+import org.springframework.web.bind.annotation.*;
+
 import com.example.abbs.service.AddressService;
 
-@Controller
-@RequestMapping("/address")
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/address")
 public class AddressController {
+
+    private final AddressService addressService;
+
     @Autowired
-    private AddressService addressService;
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
+    }
 
+    // 모든 주소 조회
     @GetMapping
+    public ResponseEntity<List<String>> getAllAddresses() {
+        List<String> addresses = addressService.findAddresses();
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
+    }
+    
+    // 주소 추가
+    @PostMapping
+    public ResponseEntity<Void> addAddress(@RequestBody String address) {
+        addressService.addAddress(address);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    // 주소 수정
+    @PutMapping("/{bid}")
+    public ResponseEntity<Void> updateAddress(@PathVariable Long bid, @RequestBody String address) {
+        addressService.updateAddress(bid, address);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 주소 삭제
+    @DeleteMapping("/{bid}")
+    public ResponseEntity<Void> deleteAddress(@PathVariable Long bid) {
+        addressService.deleteAddress(bid);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @GetMapping("/addresses")
     public String listAddresses(Model model) {
-        model.addAttribute("addresses", addressService.findAll()); // 모든 주소 정보를 조회하여 모델에 추가
-        return "address/list"; // 뷰 이름 반환
-    }
-
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("address", new Address());
-        return "address/add";
-    }
-
-    @PostMapping("/add")
-    public String addAddress(Address address, RedirectAttributes redirectAttributes) {
-        addressService.insert(address);
-        redirectAttributes.addFlashAttribute("message", "주소가 성공적으로 추가되었습니다.");
-        return "redirect:/address";
-    }
-
-    @GetMapping("/map/{bid}")
-    public String showAddressMap(@PathVariable("bid") Long bid, Model model) {
-        Address address = addressService.findById(bid);
-        if (address != null) {
-            model.addAttribute("roadAddress", address.getAddress());
-            return "address/map"; // 지도를 표시하는 뷰로 변경
-        } else {
-            return "redirect:/address";
-        }
+        List<String> addresses = addressService.findAddresses(); // 주소 데이터 조회
+        model.addAttribute("addresses", addresses); // 모델에 주소 데이터 추가
+        return "address/list"; // 템플릿 파일명 반환
     }
 }

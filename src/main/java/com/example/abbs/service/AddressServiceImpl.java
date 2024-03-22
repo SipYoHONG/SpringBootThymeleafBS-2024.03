@@ -11,23 +11,27 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressDao addressDao;
 
-    @Override
-    public List<Address> findAll() {
-        return addressDao.findAll();
-    }
+	@Override
+	public List<String> findAddresses() {
+		return addressDao.findAddresses();
+	}
 
-    @Override
-    public void insert(Address address) {
-        addressDao.insert(address);
-    }
+	@Override
+	public void addAddress(String address) {
+		addressDao.insertAddress(address);
+		
+	}
 
-    @Override
-    public void update(Address address) {
-        addressDao.update(address);
-    }
+	@Override
+	public void updateAddress(Long bid, String address) {
+		addressDao.updateAddress(bid, address);
+		
+	}
 
-    @Override
-    public Address findById(Long bid) {
-        return addressDao.findById(bid).orElse(null);
-    }
+	@Override
+	public void deleteAddress(Long bid) {
+		addressDao.deleteAddress(bid);
+		
+	}
+
 }

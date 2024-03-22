@@ -6,11 +6,6 @@ public class Address {
     private String address; // 주소
 
     public Address() { }
-    public Address(Long bid, String address) {
-    	this.bid = bid;
-    	this.address = address;
-    }
-    
     public Address(Long bid, String title, String address) {
 		this.bid = bid;
 		this.title = title;
